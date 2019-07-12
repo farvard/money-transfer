@@ -20,10 +20,8 @@ public class AccountDaoTest {
         Account save = dao.save(random);
         Optional<Account> get = dao.get(save.getId());
         Assert.assertTrue(get.isPresent());
-        Assert.assertEquals(random.getUser(), save.getUser());
-        Assert.assertEquals(random.getBalance(), save.getBalance());
-        Assert.assertEquals(random.getUser(), get.get().getUser());
-        Assert.assertEquals(random.getBalance(), get.get().getBalance());
+        assertAccountsEqualsNotConsideringId(random, save);
+        assertAccountsEqualsNotConsideringId(random, get.get());
         Assert.assertEquals(random, get.get());
     }
 
@@ -40,10 +38,8 @@ public class AccountDaoTest {
         for (int i = 0; i < 10; i++) {
             Optional<Account> get = dao.get(saves.get(i).getId());
             Assert.assertTrue(get.isPresent());
-            Assert.assertEquals(accounts.get(i).getUser(), saves.get(i).getUser());
-            Assert.assertEquals(accounts.get(i).getBalance(), saves.get(i).getBalance());
-            Assert.assertEquals(accounts.get(i).getUser(), get.get().getUser());
-            Assert.assertEquals(accounts.get(i).getBalance(), get.get().getBalance());
+            assertAccountsEqualsNotConsideringId(accounts.get(i), saves.get(i));
+            assertAccountsEqualsNotConsideringId(accounts.get(i), get.get());
         }
     }
 
@@ -53,10 +49,8 @@ public class AccountDaoTest {
         Account save = dao.save(random);
         Optional<Account> get = dao.get(save.getId());
         Assert.assertTrue(get.isPresent());
-        Assert.assertEquals(random.getUser(), save.getUser());
-        Assert.assertEquals(random.getBalance(), save.getBalance());
-        Assert.assertEquals(random.getUser(), get.get().getUser());
-        Assert.assertEquals(random.getBalance(), get.get().getBalance());
+        assertAccountsEqualsNotConsideringId(random, save);
+        assertAccountsEqualsNotConsideringId(random, get.get());
     }
 
     @Test
@@ -79,6 +73,11 @@ public class AccountDaoTest {
         a.setUser(RandomStringUtils.randomAlphabetic(20));
         a.setBalance(RandomUtils.nextLong(1000, 100000));
         return a;
+    }
+
+    private void assertAccountsEqualsNotConsideringId(Account expected, Account actual) {
+        Assert.assertEquals(expected.getUser(), actual.getUser());
+        Assert.assertEquals(expected.getBalance(), actual.getBalance());
     }
 
 }

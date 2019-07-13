@@ -1,9 +1,11 @@
 package com.taher.moneytransfer.dao;
 
+import com.taher.moneytransfer.DatabaseUtil;
 import com.taher.moneytransfer.model.Account;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -13,6 +15,11 @@ import java.util.Optional;
 public class AccountDaoTest {
 
     private AccountDao dao = new AccountDaoH2Impl();
+
+    @BeforeClass
+    public static void beforeClass() {
+        DatabaseUtil.initDB();
+    }
 
     @Test
     public void get() {

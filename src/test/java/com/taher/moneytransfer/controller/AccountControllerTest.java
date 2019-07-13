@@ -7,10 +7,8 @@ import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.eclipse.jetty.http.HttpStatus;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import spark.Spark;
 
 import java.util.List;
 
@@ -29,11 +27,6 @@ public class AccountControllerTest extends ControllerTest {
     public static void beforeClass() {
         new AccountController();
         DatabaseUtil.initDB();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        Spark.stop();
     }
 
     @Test

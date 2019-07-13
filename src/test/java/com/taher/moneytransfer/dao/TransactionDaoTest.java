@@ -1,9 +1,10 @@
 package com.taher.moneytransfer.dao;
 
-import com.taher.moneytransfer.model.Account;
+import com.taher.moneytransfer.DatabaseUtil;
 import com.taher.moneytransfer.model.Transaction;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,6 +15,11 @@ import java.util.Optional;
 public class TransactionDaoTest {
 
     private TransactionDao dao = new TransactionDaoH2Impl();
+
+    @BeforeClass
+    public static void beforeClass() {
+        DatabaseUtil.initDB();
+    }
 
     @Test
     public void get() {

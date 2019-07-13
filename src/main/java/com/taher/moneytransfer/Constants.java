@@ -9,6 +9,7 @@ public interface Constants {
 
     String DEFAULT_APP_PATH = "http://localhost:4567";
     String ACCOUNTS_BASE_URL = "/accounts";
+    String TRANSACTIONS_BASE_URL = "/transactions";
 
     String CONTENT_TYPE_JSON = "application/json";
     String HEADER_LOCATION = "Location";

@@ -1,18 +1,3 @@
-CREATE TABLE account
-(
-    'id'      INTEGER      NOT NULL,
-    'user'    VARCHAR(255) NOT NULL,
-    'balance' BIGINT       NOT NULL,
-    PRIMARY KEY ('id')
-);
-
-CREATE TABLE transaction
-(
-    'id'     INTEGER NOT NULL,
-    'time'   TIME    NOT NULL,
-    'src'    INTEGER NOT NULL,
-    'dst'    INTEGER NOT NULL,
-    'amount' BIGINT  NOT NULL,
-    PRIMARY KEY ('id')
-);
-
+INSERT INTO account values ( 1, 'user1', 10000 ); //
+INSERT INTO account values ( 2, 'user2', 20000 ); //
+INSERT INTO account values ( 3, 'user3', 30000 ); //

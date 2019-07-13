@@ -25,7 +25,7 @@ public class AccountDaoH2Impl implements AccountDao {
 
     @Override
     public List<Account> getAll() {
-        return DatabaseUtil.queryList(Account.class, GET_ALL_QUERY, null);
+        return DatabaseUtil.queryList(Account.class, GET_ALL_QUERY);
     }
 
     @Override
@@ -45,4 +45,3 @@ public class AccountDaoH2Impl implements AccountDao {
     }
 }
 
-    

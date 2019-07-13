@@ -17,7 +17,25 @@ public class DatabaseUtil {
 
     private static final String DB_USER = "sa";
     private static final String DB_PASS = "";
-    private static final String DB_URL = "jdbc:h2:mem:money_transfer;DB_CLOSE_DELAY=-1;INIT=runscript from 'classpath:/create-tables.sql'";
+    private static final String DB_URL = "jdbc:h2:mem:money_transfer;DB_CLOSE_DELAY=-1;";
+    private static final String CREATE_TABLE_SCRIPT = "INIT=runscript from 'classpath:/create-tables.sql'";
+    private static final String SAMPLAE_DATA_SCRIPT = "INIT=runscript from 'classpath:/data.sql'";
+
+    public static void initDB() {
+        try (Connection connection = DriverManager.getConnection(DB_URL + CREATE_TABLE_SCRIPT, DB_USER, DB_PASS)) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IllegalStateException();
+        }
+    }
+
+    public static void insertSampleData() {
+        try (Connection connection = DriverManager.getConnection(DB_URL + SAMPLAE_DATA_SCRIPT, DB_USER, DB_PASS)) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IllegalStateException();
+        }
+    }
 
     public static <E> Optional<E> queryOne(Class<E> clazz, String query, Object... params) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
@@ -30,12 +48,13 @@ public class DatabaseUtil {
         }
     }
 
-    public static <E> List<E> queryList(Class<E> clazz, String query, List<Object> params) {
+    public static <E> List<E> queryList(Class<E> clazz, String query, Object... params) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
             QueryRunner runner = new QueryRunner();
             BeanListHandler<E> handler = new BeanListHandler<>(clazz);
             return runner.query(connection, query, handler, params);
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new IllegalStateException();
         }
     }

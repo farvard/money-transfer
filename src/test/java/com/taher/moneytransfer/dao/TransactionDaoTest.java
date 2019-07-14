@@ -42,11 +42,10 @@ public class TransactionDaoTest {
             saves.add(dao.save(account));
         }
         Assert.assertEquals(saves.size(), 10);
+        List<Transaction> all = dao.getAll();
         for (int i = 0; i < 10; i++) {
-            Optional<Transaction> get = dao.get(saves.get(i).getId());
-            Assert.assertTrue(get.isPresent());
             assertTransactionsEqualsNotConsideringId(trans.get(i), saves.get(i));
-            assertTransactionsEqualsNotConsideringId(trans.get(i), get.get());
+            assertTransactionsEqualsNotConsideringId(trans.get(i), all.get(i));
         }
     }
 
@@ -58,6 +57,27 @@ public class TransactionDaoTest {
         Assert.assertTrue(get.isPresent());
         assertTransactionsEqualsNotConsideringId(random, save);
         assertTransactionsEqualsNotConsideringId(random, get.get());
+    }
+
+    @Test
+    public void getAllByAccountId() {
+        List<Transaction> trans = new ArrayList<>();
+        List<Transaction> saves = new ArrayList<>();
+        int count = 30;
+        long id = 1;
+        for (int i = 0; i < count; i++) {
+            Transaction account = randomTransaction();
+            if (i % 3 == 0) {
+                account.setSrcAccountId(id);
+            } else if (i % 3 == 1) {
+                account.setSrcAccountId(id);
+            }
+            trans.add(account);
+            saves.add(dao.save(account));
+        }
+        Assert.assertEquals(saves.size(), count);
+        List<Transaction> all = dao.getAllByAccountId(id);
+        Assert.assertEquals(all.size(), count / 3 * 2);
     }
 
     private Transaction randomTransaction() {

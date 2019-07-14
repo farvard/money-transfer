@@ -6,10 +6,8 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomUtils;
 import org.eclipse.jetty.http.HttpStatus;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import spark.Spark;
 
 import java.util.Date;
 import java.util.List;

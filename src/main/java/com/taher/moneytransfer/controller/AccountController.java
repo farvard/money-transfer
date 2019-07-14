@@ -3,6 +3,8 @@ package com.taher.moneytransfer.controller;
 import com.google.gson.Gson;
 import com.taher.moneytransfer.dao.AccountDao;
 import com.taher.moneytransfer.dao.AccountDaoH2Impl;
+import com.taher.moneytransfer.dao.TransactionDao;
+import com.taher.moneytransfer.dao.TransactionDaoH2Impl;
 import com.taher.moneytransfer.model.Account;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Route;
@@ -19,7 +21,7 @@ import static spark.Spark.*;
 public class AccountController {
 
     private AccountDao accountDao = new AccountDaoH2Impl();
-
+    private TransactionDao transactionDao = new TransactionDaoH2Impl();
 
     public AccountController() {
         path(ACCOUNTS_BASE_URL, () -> {
@@ -27,6 +29,7 @@ public class AccountController {
             get("", getAllAccounts(), json());
             post("", saveAccount(), json());
             put("/:id", updateAccount(), json());
+            put("/:id" + TRANSACTIONS_BASE_URL, updateAccount(), json());
         });
     }
 
@@ -61,6 +64,11 @@ public class AccountController {
             return EMPTY_STRING;
         };
     }
-}
 
-    
+    private Route getAccountsTransactions() {
+        return (request, response) -> {
+            transactionDao.getAllByAccountId(Long.parseLong(request.params(":id")));
+            return EMPTY_STRING;
+        };
+    }
+}

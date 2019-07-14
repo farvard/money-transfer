@@ -14,6 +14,7 @@ public class TransactionDaoH2Impl implements TransactionDao {
 
     private static final String GET_QUERY = "SELECT * FROM transaction WHERE id = ?";
     private static final String GET_ALL_QUERY = "SELECT * FROM transaction";
+    private static final String GET_ALL_BY_ACCOUNT_ID_QUERY = "SELECT * FROM transaction WHERE srcAccountId = ? OR dstAccountId = ?";
     private static final String INSERT_QUERY = "INSERT INTO transaction values(?, ?, ?, ?, ?)";
     private static final IdGenerator ID_GENERATOR = new IdGenerator();
 
@@ -36,6 +37,11 @@ public class TransactionDaoH2Impl implements TransactionDao {
                 transaction.getSrcAccountId(), transaction.getDstAccountId(), transaction.getAmount());
         return new Transaction(id, transaction.getTime(),
                 transaction.getSrcAccountId(), transaction.getDstAccountId(), transaction.getAmount());
+    }
+
+    @Override
+    public List<Transaction> getAllByAccountId(Long accountId) {
+        return DatabaseUtil.queryList(Transaction.class, GET_ALL_BY_ACCOUNT_ID_QUERY, accountId, accountId);
     }
 
 }

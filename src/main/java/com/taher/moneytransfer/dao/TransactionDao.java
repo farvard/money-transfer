@@ -16,6 +16,7 @@ public interface TransactionDao {
 
     Transaction save(Transaction transaction);
 
+    List<Transaction> getAllByAccountId(Long accountId);
+
 }
 
-    

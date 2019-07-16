@@ -1,6 +1,5 @@
 package com.taher.moneytransfer.dao;
 
-import com.taher.moneytransfer.DatabaseUtil;
 import com.taher.moneytransfer.IdGenerator;
 import com.taher.moneytransfer.model.Account;
 

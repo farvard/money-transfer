@@ -1,6 +1,6 @@
 package com.taher.moneytransfer.controller;
 
-import com.taher.moneytransfer.DatabaseUtil;
+import com.taher.moneytransfer.dao.DatabaseUtil;
 import com.taher.moneytransfer.model.Account;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;

@@ -1,4 +1,4 @@
-package com.taher.moneytransfer;
+package com.taher.moneytransfer.dao;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;

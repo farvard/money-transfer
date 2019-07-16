@@ -1,6 +1,5 @@
 package com.taher.moneytransfer.dao;
 
-import com.taher.moneytransfer.DatabaseUtil;
 import com.taher.moneytransfer.model.Account;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;

@@ -1,5 +1,6 @@
 package com.taher.moneytransfer.dao;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -13,6 +14,7 @@ import java.util.Optional;
 /**
  *
  */
+@Slf4j
 public class DatabaseUtil {
 
     private static final String DB_USER = "sa";
@@ -21,20 +23,14 @@ public class DatabaseUtil {
     private static final String CREATE_TABLE_SCRIPT = "INIT=runscript from 'classpath:/create-tables.sql'";
     private static final String SAMPLAE_DATA_SCRIPT = "INIT=runscript from 'classpath:/data.sql'";
 
-    public static void initDB() {
-        try (Connection connection = DriverManager.getConnection(DB_URL + CREATE_TABLE_SCRIPT, DB_USER, DB_PASS)) {
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new IllegalStateException();
-        }
+    public static void initDB() throws SQLException {
+        DriverManager.getConnection(DB_URL + CREATE_TABLE_SCRIPT, DB_USER, DB_PASS);
+        log.info("database initialized.");
     }
 
-    public static void insertSampleData() {
-        try (Connection connection = DriverManager.getConnection(DB_URL + SAMPLAE_DATA_SCRIPT, DB_USER, DB_PASS)) {
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new IllegalStateException();
-        }
+    public static void insertSampleData() throws SQLException {
+        DriverManager.getConnection(DB_URL + SAMPLAE_DATA_SCRIPT, DB_USER, DB_PASS);
+        log.info("sample data inserted.");
     }
 
     public static <E> Optional<E> queryOne(Class<E> clazz, String query, Object... params) {
@@ -43,7 +39,6 @@ public class DatabaseUtil {
             BeanHandler<E> handler = new BeanHandler<>(clazz);
             return Optional.ofNullable(runner.query(connection, query, handler, params));
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new IllegalStateException();
         }
     }

@@ -1,22 +1,25 @@
 package com.taher.moneytransfer.dao;
 
+import com.taher.moneytransfer.exception.NotEnoughMoneyException;
+import com.taher.moneytransfer.exception.RecordNotFoundException;
 import com.taher.moneytransfer.model.Account;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  *
  */
 public interface AccountDao {
 
-    Optional<Account> get(Long id);
+    Account get(Long id) throws RecordNotFoundException;
 
     List<Account> getAll();
 
     Account save(Account account);
 
-    void update(Account account);
+    void deposit(Long id, long amount) throws RecordNotFoundException, NotEnoughMoneyException;
+
+    void withdrawal(Long id, long amount) throws RecordNotFoundException;
 }
 
     

@@ -1,5 +1,6 @@
 package com.taher.moneytransfer.dao;
 
+import com.taher.moneytransfer.exception.RecordNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -9,7 +10,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 /**
  *
@@ -33,11 +33,11 @@ public class DatabaseUtil {
         log.info("sample data inserted.");
     }
 
-    public static <E> Optional<E> queryOne(Class<E> clazz, String query, Object... params) {
+    public static <E> E queryOne(Class<E> clazz, String query, Object... params) throws RecordNotFoundException {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
             QueryRunner runner = new QueryRunner();
             BeanHandler<E> handler = new BeanHandler<>(clazz);
-            return Optional.ofNullable(runner.query(connection, query, handler, params));
+            return runner.query(connection, query, handler, params);
         } catch (SQLException e) {
             throw new IllegalStateException();
         }

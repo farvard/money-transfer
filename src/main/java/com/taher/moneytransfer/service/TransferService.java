@@ -5,6 +5,7 @@ import com.taher.moneytransfer.dao.AccountDaoH2Impl;
 import com.taher.moneytransfer.dao.TransactionDao;
 import com.taher.moneytransfer.dao.TransactionDaoH2Impl;
 import com.taher.moneytransfer.exception.NotEnoughMoneyException;
+import com.taher.moneytransfer.exception.RecordNotFoundException;
 import com.taher.moneytransfer.lock.AccountLock;
 import com.taher.moneytransfer.lock.SingleNodeInMemoryAccountLock;
 import com.taher.moneytransfer.model.Account;
@@ -20,7 +21,7 @@ public class TransferService {
     private AccountLock lock = new SingleNodeInMemoryAccountLock();
     private long timeoutMillis = 2000;
 
-    public void transfer(Transfer transfer) throws InterruptedException, NotEnoughMoneyException {
+    public void transfer(Transfer transfer) throws InterruptedException, NotEnoughMoneyException, RecordNotFoundException {
         Long srcAccountId = transfer.getSrcAccountId();
         Long dstAccountId = transfer.getDstAccountId();
         lock(srcAccountId, dstAccountId);
@@ -29,16 +30,13 @@ public class TransferService {
         unlock(srcAccountId, dstAccountId);
     }
 
-    private void transfer(Long src, Long dst, long amount) throws NotEnoughMoneyException {
-        Account s = accountDao.get(src).get();
-        Account d = accountDao.get(dst).get();
+    private void transfer(Long src, Long dst, long amount) throws NotEnoughMoneyException, RecordNotFoundException {
+        Account s = accountDao.get(src);
         if (s.getBalance() < amount) {
             throw new NotEnoughMoneyException();
         }
-        s.setBalance(s.getBalance() - amount);
-        d.setBalance(d.getBalance() + amount);
-        accountDao.update(s);
-        accountDao.update(d);
+        accountDao.withdrawal(src, amount);
+        accountDao.deposit(dst, amount);
     }
 
     private void lock(Long src, Long dst) throws InterruptedException {

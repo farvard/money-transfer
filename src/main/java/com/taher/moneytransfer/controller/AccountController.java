@@ -8,8 +8,6 @@ import com.taher.moneytransfer.service.AccountService;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Route;
 
-import java.util.Optional;
-
 import static com.taher.moneytransfer.Constants.*;
 import static com.taher.moneytransfer.controller.JsonUtil.json;
 import static spark.Spark.*;
@@ -27,16 +25,14 @@ public class AccountController {
             get("/:id", getOneAccount(), json());
             get("", getAllAccounts(), json());
             post("", saveAccount(), json());
-            put("/:id", updateAccount(), json());
-            put("/:id" + TRANSACTIONS_BASE_URL, updateAccount(), json());
+            get("/:id" + TRANSACTIONS_BASE_URL, getAccountsTransactions(), json());
         });
     }
 
     private Route getOneAccount() {
         return (request, response) -> {
             response.type(CONTENT_TYPE_JSON);
-            Optional<Account> account = accountService.get(Long.parseLong(request.params(":id")));
-            return account.get();
+            return accountService.get(Long.parseLong(request.params(":id")));
         };
     }
 
@@ -54,13 +50,6 @@ public class AccountController {
             response.header(HEADER_LOCATION, location);
             response.status(HttpStatus.CREATED_201);
             return save.getId();
-        };
-    }
-
-    private Route updateAccount() {
-        return (request, response) -> {
-            accountService.update(new Gson().fromJson(request.body(), Account.class));
-            return EMPTY_STRING;
         };
     }
 

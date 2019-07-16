@@ -1,5 +1,6 @@
 package com.taher.moneytransfer.dao;
 
+import com.taher.moneytransfer.exception.RecordNotFoundException;
 import com.taher.moneytransfer.model.Account;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -10,7 +11,6 @@ import org.junit.Test;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class AccountDaoTest {
 
@@ -22,18 +22,17 @@ public class AccountDaoTest {
     }
 
     @Test
-    public void get() {
+    public void get() throws RecordNotFoundException {
         Account random = randomAccount();
         Account save = dao.save(random);
-        Optional<Account> get = dao.get(save.getId());
-        Assert.assertTrue(get.isPresent());
+        Account get = dao.get(save.getId());
         assertAccountsEqualsNotConsideringId(random, save);
-        assertAccountsEqualsNotConsideringId(random, get.get());
-        Assert.assertEquals(random, get.get());
+        assertAccountsEqualsNotConsideringId(random, get);
+        Assert.assertEquals(random, get);
     }
 
     @Test
-    public void getAll() {
+    public void getAll() throws RecordNotFoundException {
         List<Account> accounts = new ArrayList<>();
         List<Account> saves = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -43,36 +42,19 @@ public class AccountDaoTest {
         }
         Assert.assertEquals(saves.size(), 10);
         for (int i = 0; i < 10; i++) {
-            Optional<Account> get = dao.get(saves.get(i).getId());
-            Assert.assertTrue(get.isPresent());
+            Account get = dao.get(saves.get(i).getId());
             assertAccountsEqualsNotConsideringId(accounts.get(i), saves.get(i));
-            assertAccountsEqualsNotConsideringId(accounts.get(i), get.get());
+            assertAccountsEqualsNotConsideringId(accounts.get(i), get);
         }
     }
 
     @Test
-    public void save() {
+    public void save() throws RecordNotFoundException {
         Account random = randomAccount();
         Account save = dao.save(random);
-        Optional<Account> get = dao.get(save.getId());
-        Assert.assertTrue(get.isPresent());
+        Account get = dao.get(save.getId());
         assertAccountsEqualsNotConsideringId(random, save);
-        assertAccountsEqualsNotConsideringId(random, get.get());
-    }
-
-    @Test
-    public void update() {
-        String tail = ".TAIL";
-        long diff = 1000;
-        Account random = randomAccount();
-        Account save = dao.save(random);
-        save.setUser(save.getUser() + tail);
-        save.setBalance(save.getBalance() + diff);
-        dao.update(save);
-        Optional<Account> get = dao.get(save.getId());
-        Assert.assertTrue(get.isPresent());
-        Assert.assertEquals(random.getUser() + tail, get.get().getUser());
-        Assert.assertEquals(random.getBalance() + diff, get.get().getBalance().longValue());
+        assertAccountsEqualsNotConsideringId(random, get);
     }
 
     private Account randomAccount() {

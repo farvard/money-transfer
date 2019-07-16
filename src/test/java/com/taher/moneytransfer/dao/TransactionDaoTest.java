@@ -1,7 +1,9 @@
 package com.taher.moneytransfer.dao;
 
+import com.taher.moneytransfer.exception.RecordNotFoundException;
 import com.taher.moneytransfer.model.Transaction;
 import org.apache.commons.lang3.RandomUtils;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -10,7 +12,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public class TransactionDaoTest {
 
@@ -22,14 +23,13 @@ public class TransactionDaoTest {
     }
 
     @Test
-    public void get() {
+    public void get() throws RecordNotFoundException {
         Transaction random = randomTransaction();
         Transaction save = dao.save(random);
-        Optional<Transaction> get = dao.get(save.getId());
-        Assert.assertTrue(get.isPresent());
+        Transaction get = dao.get(save.getId());
         assertTransactionsEqualsNotConsideringId(random, save);
-        assertTransactionsEqualsNotConsideringId(random, get.get());
-        Assert.assertEquals(save, get.get());
+        assertTransactionsEqualsNotConsideringId(random, get);
+        Assert.assertEquals(save, get);
     }
 
     @Test
@@ -45,18 +45,17 @@ public class TransactionDaoTest {
         List<Transaction> all = dao.getAll();
         for (int i = 0; i < 10; i++) {
             assertTransactionsEqualsNotConsideringId(trans.get(i), saves.get(i));
-            assertTransactionsEqualsNotConsideringId(trans.get(i), all.get(i));
         }
+        Assert.assertThat(all.size(), Matchers.greaterThan(saves.size()));
     }
 
     @Test
-    public void save() {
+    public void save() throws RecordNotFoundException {
         Transaction random = randomTransaction();
         Transaction save = dao.save(random);
-        Optional<Transaction> get = dao.get(save.getId());
-        Assert.assertTrue(get.isPresent());
+        Transaction get = dao.get(save.getId());
         assertTransactionsEqualsNotConsideringId(random, save);
-        assertTransactionsEqualsNotConsideringId(random, get.get());
+        assertTransactionsEqualsNotConsideringId(random, get);
     }
 
     @Test
@@ -90,7 +89,7 @@ public class TransactionDaoTest {
     }
 
     private void assertTransactionsEqualsNotConsideringId(Transaction expected, Transaction actual) {
-        Assert.assertEquals(expected.getTime(), actual.getTime());
+        Assert.assertEquals(expected.getTime().getTime(), actual.getTime().getTime());
         Assert.assertEquals(expected.getSrcAccountId(), actual.getSrcAccountId());
         Assert.assertEquals(expected.getDstAccountId(), actual.getDstAccountId());
         Assert.assertEquals(expected.getAmount(), actual.getAmount());

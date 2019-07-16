@@ -2,10 +2,10 @@ package com.taher.moneytransfer.service;
 
 import com.taher.moneytransfer.dao.TransactionDao;
 import com.taher.moneytransfer.dao.TransactionDaoH2Impl;
+import com.taher.moneytransfer.exception.RecordNotFoundException;
 import com.taher.moneytransfer.model.Transaction;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  *
@@ -14,7 +14,7 @@ public class TransactionService {
 
     TransactionDao transactionDao = new TransactionDaoH2Impl();
 
-    public Optional<Transaction> get(Long id) {
+    public Transaction get(Long id) throws RecordNotFoundException {
         return transactionDao.get(id);
     }
 

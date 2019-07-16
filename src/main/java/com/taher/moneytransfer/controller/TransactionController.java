@@ -6,8 +6,6 @@ import com.taher.moneytransfer.service.TransactionService;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Route;
 
-import java.util.Optional;
-
 import static com.taher.moneytransfer.Constants.*;
 import static com.taher.moneytransfer.controller.JsonUtil.json;
 import static spark.Spark.*;
@@ -30,8 +28,7 @@ public class TransactionController {
     private Route getOneTransaction() {
         return (request, response) -> {
             response.type(CONTENT_TYPE_JSON);
-            Optional<Transaction> transaction = transactionService.get(Long.parseLong(request.params(":id")));
-            return transaction.get();
+            return transactionService.get(Long.parseLong(request.params(":id")));
         };
     }
 

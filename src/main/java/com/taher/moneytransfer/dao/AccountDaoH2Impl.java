@@ -1,10 +1,10 @@
 package com.taher.moneytransfer.dao;
 
-import com.taher.moneytransfer.util.IdGenerator;
+import com.taher.moneytransfer.exception.RecordNotFoundException;
 import com.taher.moneytransfer.model.Account;
+import com.taher.moneytransfer.util.IdGenerator;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  *
@@ -12,13 +12,14 @@ import java.util.Optional;
 public class AccountDaoH2Impl implements AccountDao {
 
     private static final String GET_QUERY = "SELECT * FROM account WHERE id = ?";
-    private static final String GET_ALL_QUERY = "SELECT * FROM account";
+    private static final String GET_ALL_QUERY = "SELECT * FROM account ORDER BY id";
     private static final String INSERT_QUERY = "INSERT INTO account values(?, ?, ?)";
-    private static final String UPDATE_QUERY = "UPDATE account SET user=?, balance=? WHERE id=?";
+    private static final String DEPOSIT_QUERY = "UPDATE account SET balance=balance + ?  WHERE id = ?";
+    private static final String WITHDRAWAL_QUERY = "UPDATE account SET balance=balance - ?  WHERE id = ?";
     private static final IdGenerator ID_GENERATOR = new IdGenerator();
 
     @Override
-    public Optional<Account> get(Long id) {
+    public Account get(Long id) throws RecordNotFoundException {
         return DatabaseUtil.queryOne(Account.class, GET_QUERY, id);
     }
 
@@ -36,11 +37,13 @@ public class AccountDaoH2Impl implements AccountDao {
     }
 
     @Override
-    public void update(Account account) {
-        if (account.getId() == null) {
-            throw new IllegalStateException();
-        }
-        DatabaseUtil.queryUpdate(UPDATE_QUERY, account.getUser(), account.getBalance(), account.getId());
+    public void deposit(Long id, long amount) {
+        DatabaseUtil.queryUpdate(DEPOSIT_QUERY, amount, id);
+    }
+
+    @Override
+    public void withdrawal(Long id, long amount) {
+        DatabaseUtil.queryUpdate(WITHDRAWAL_QUERY, amount, id);
     }
 }
 

@@ -17,7 +17,8 @@ import static com.taher.moneytransfer.Constants.*;
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 
 public class AccountControllerTest extends ControllerTest {
 
@@ -53,22 +54,6 @@ public class AccountControllerTest extends ControllerTest {
         post.then().statusCode(HttpStatus.CREATED_201);
         String location = post.header(HEADER_LOCATION);
         get(location).then().statusCode(HttpStatus.OK_200);
-    }
-
-    @Test
-    public void update() {
-        String userDiff = ".UPDATE";
-        long balanceDiff = 1000;
-        Response post = given().body(randomAccount()).post(ACCOUNT_TEST_URL);
-        post.then().statusCode(HttpStatus.CREATED_201);
-        String location = post.header(HEADER_LOCATION);
-        Account account = get(location).as(Account.class);
-        Account newAccount = new Account(account.getId(), account.getUser() + userDiff, account.getBalance() + balanceDiff);
-        given().body(newAccount).put(location).then().statusCode(HttpStatus.OK_200);
-        Account updated = get(location).as(new TypeRef<Account>() {
-        });
-        assertThat(updated.getUser(), equalTo(account.getUser() + userDiff));
-        assertThat(updated.getBalance(), equalTo(account.getBalance() + balanceDiff));
     }
 
     private Account randomAccount() {

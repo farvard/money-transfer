@@ -1,7 +1,8 @@
 package com.taher.moneytransfer.controller;
 
-import com.taher.moneytransfer.dao.TransactionDao;
-import com.taher.moneytransfer.dao.TransactionDaoH2Impl;
+import com.google.gson.Gson;
+import com.taher.moneytransfer.model.Transfer;
+import com.taher.moneytransfer.service.TransferService;
 import spark.Route;
 
 import static com.taher.moneytransfer.Constants.TRANSFER_BASE_URL;
@@ -14,7 +15,7 @@ import static spark.Spark.post;
  */
 public class TransferController {
 
-    private TransactionDao transactionDao = new TransactionDaoH2Impl();
+    private TransferService transferService = new TransferService();
 
     public TransferController() {
         path(TRANSFER_BASE_URL, () -> {
@@ -24,8 +25,9 @@ public class TransferController {
 
     private Route transfer() {
         return (request, response) -> {
+            Transfer transfer = new Gson().fromJson(request.body(), Transfer.class);
+            transferService.transfer(transfer);
             return "";
-
         };
     }
 }

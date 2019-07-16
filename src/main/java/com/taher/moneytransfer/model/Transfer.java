@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  *
  */
@@ -16,6 +18,9 @@ public class Transfer {
     private Long dstAccountId;
     private Long amount;
 
+    public Transaction createTransaction() {
+        return new Transaction(null, new Date(), srcAccountId, dstAccountId, amount);
+    }
 }
 
     

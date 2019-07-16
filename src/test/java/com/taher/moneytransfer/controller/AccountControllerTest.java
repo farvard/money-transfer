@@ -10,6 +10,7 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import static com.taher.moneytransfer.Constants.*;
@@ -24,7 +25,7 @@ public class AccountControllerTest extends ControllerTest {
     private final static String ACCOUNT_TEST_URL = DEFAULT_APP_PATH + ACCOUNTS_BASE_URL;
 
     @BeforeClass
-    public static void beforeClass() {
+    public static void beforeClass() throws SQLException {
         new AccountController();
         DatabaseUtil.initDB();
     }

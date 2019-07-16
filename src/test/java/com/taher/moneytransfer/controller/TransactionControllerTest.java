@@ -9,6 +9,7 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class TransactionControllerTest extends ControllerTest {
     private final static String TRANSACTION_TEST_URL = DEFAULT_APP_PATH + TRANSACTIONS_BASE_URL;
 
     @BeforeClass
-    public static void beforeClass() {
+    public static void beforeClass() throws SQLException {
         new TransactionController();
         DatabaseUtil.initDB();
     }

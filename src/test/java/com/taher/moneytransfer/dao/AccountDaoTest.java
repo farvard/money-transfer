@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,7 @@ public class AccountDaoTest {
     private AccountDao dao = new AccountDaoH2Impl();
 
     @BeforeClass
-    public static void beforeClass() {
+    public static void beforeClass() throws SQLException {
         DatabaseUtil.initDB();
     }
 

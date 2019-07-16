@@ -1,4 +1,4 @@
-package com.taher.moneytransfer;
+package com.taher.moneytransfer.util;
 
 import java.util.concurrent.atomic.AtomicLong;
 

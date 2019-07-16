@@ -1,6 +1,6 @@
 package com.taher.moneytransfer.dao;
 
-import com.taher.moneytransfer.IdGenerator;
+import com.taher.moneytransfer.util.IdGenerator;
 import com.taher.moneytransfer.model.Transaction;
 
 import java.util.List;

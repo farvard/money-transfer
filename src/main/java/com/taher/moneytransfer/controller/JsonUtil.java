@@ -1,4 +1,4 @@
-package com.taher.moneytransfer;
+package com.taher.moneytransfer.controller;
 
 import com.google.gson.Gson;
 import spark.ResponseTransformer;

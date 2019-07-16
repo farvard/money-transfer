@@ -1,18 +1,17 @@
 package com.taher.moneytransfer.controller;
 
 import com.google.gson.Gson;
-import com.taher.moneytransfer.dao.AccountDao;
-import com.taher.moneytransfer.dao.AccountDaoH2Impl;
 import com.taher.moneytransfer.dao.TransactionDao;
 import com.taher.moneytransfer.dao.TransactionDaoH2Impl;
 import com.taher.moneytransfer.model.Account;
+import com.taher.moneytransfer.service.AccountService;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Route;
 
 import java.util.Optional;
 
 import static com.taher.moneytransfer.Constants.*;
-import static com.taher.moneytransfer.JsonUtil.json;
+import static com.taher.moneytransfer.controller.JsonUtil.json;
 import static spark.Spark.*;
 
 /**
@@ -20,7 +19,7 @@ import static spark.Spark.*;
  */
 public class AccountController {
 
-    private AccountDao accountDao = new AccountDaoH2Impl();
+    private AccountService accountService = new AccountService();
     private TransactionDao transactionDao = new TransactionDaoH2Impl();
 
     public AccountController() {
@@ -36,7 +35,7 @@ public class AccountController {
     private Route getOneAccount() {
         return (request, response) -> {
             response.type(CONTENT_TYPE_JSON);
-            Optional<Account> account = accountDao.get(Long.parseLong(request.params(":id")));
+            Optional<Account> account = accountService.get(Long.parseLong(request.params(":id")));
             return account.get();
         };
     }
@@ -44,13 +43,13 @@ public class AccountController {
     private Route getAllAccounts() {
         return (request, response) -> {
             response.type(CONTENT_TYPE_JSON);
-            return accountDao.getAll();
+            return accountService.getAll();
         };
     }
 
     private Route saveAccount() {
         return (request, response) -> {
-            Account save = accountDao.save(new Gson().fromJson(request.body(), Account.class));
+            Account save = accountService.save(new Gson().fromJson(request.body(), Account.class));
             String location = request.raw().getRequestURL().toString() + "/" + save.getId();
             response.header(HEADER_LOCATION, location);
             response.status(HttpStatus.CREATED_201);
@@ -60,7 +59,7 @@ public class AccountController {
 
     private Route updateAccount() {
         return (request, response) -> {
-            accountDao.update(new Gson().fromJson(request.body(), Account.class));
+            accountService.update(new Gson().fromJson(request.body(), Account.class));
             return EMPTY_STRING;
         };
     }

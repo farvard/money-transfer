@@ -24,6 +24,7 @@ A simple RESTful API for money transfers between accounts
 ### How to run
 ```sh
 mvn exec:java
+## see http://localhost:4567/accounts
 ```
 
 ### How to run Tests

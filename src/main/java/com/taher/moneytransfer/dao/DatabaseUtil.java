@@ -1,14 +1,15 @@
 package com.taher.moneytransfer.dao;
 
 import com.taher.moneytransfer.exception.RecordNotFoundException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -26,6 +27,11 @@ public class DatabaseUtil {
     public static void initDB() throws SQLException {
         DriverManager.getConnection(DB_URL + CREATE_TABLE_SCRIPT, DB_USER, DB_PASS);
         log.info("database initialized.");
+    }
+
+    public static void insertSampleData() throws SQLException {
+        DriverManager.getConnection(DB_URL + SAMPLE_DATA_SCRIPT, DB_USER, DB_PASS);
+        log.info("sample data inserted.");
     }
 
     public static <E> E queryOne(Class<E> clazz, String query, Object... params) throws RecordNotFoundException {

@@ -1,20 +1,14 @@
-package com.taher.moneytransfer.controller;
+package com.taher.moneytransfer;
 
 import com.taher.moneytransfer.dao.DatabaseUtil;
 import java.sql.SQLException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-/**
- *
- */
-public class ControllerTest {
+public class BaseTest {
 
     @BeforeClass
     public static void beforeClass() throws SQLException {
-        new AccountController();
-        new TransactionController();
-        new TransferController();
         DatabaseUtil.initDB();
     }
 
@@ -24,5 +18,3 @@ public class ControllerTest {
     }
 
 }
-
-    

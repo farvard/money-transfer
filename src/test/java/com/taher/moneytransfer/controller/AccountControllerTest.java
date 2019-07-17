@@ -1,35 +1,25 @@
 package com.taher.moneytransfer.controller;
 
-import com.taher.moneytransfer.dao.DatabaseUtil;
-import com.taher.moneytransfer.model.Account;
-import io.restassured.common.mapper.TypeRef;
-import io.restassured.response.Response;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
-import org.eclipse.jetty.http.HttpStatus;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import static com.taher.moneytransfer.Constants.*;
+import static com.taher.moneytransfer.Constants.ACCOUNTS_BASE_URL;
+import static com.taher.moneytransfer.Constants.DEFAULT_APP_PATH;
+import static com.taher.moneytransfer.Constants.HEADER_LOCATION;
+import static com.taher.moneytransfer.TestUtil.randomAccount;
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 
+import com.taher.moneytransfer.model.Account;
+import io.restassured.common.mapper.TypeRef;
+import io.restassured.response.Response;
+import java.util.List;
+import org.eclipse.jetty.http.HttpStatus;
+import org.junit.Test;
+
 public class AccountControllerTest extends ControllerTest {
 
-
     private final static String ACCOUNT_TEST_URL = DEFAULT_APP_PATH + ACCOUNTS_BASE_URL;
-
-    @BeforeClass
-    public static void beforeClass() throws SQLException {
-        new AccountController();
-        DatabaseUtil.initDB();
-    }
 
     @Test
     public void getTest() {
@@ -49,6 +39,11 @@ public class AccountControllerTest extends ControllerTest {
     }
 
     @Test
+    public void getAccountsTransactionsTest() {
+        //TODO
+    }
+
+    @Test
     public void save() {
         Response post = given().body(randomAccount()).post(ACCOUNT_TEST_URL);
         post.then().statusCode(HttpStatus.CREATED_201);
@@ -56,10 +51,4 @@ public class AccountControllerTest extends ControllerTest {
         get(location).then().statusCode(HttpStatus.OK_200);
     }
 
-    private Account randomAccount() {
-        Account a = new Account();
-        a.setUser(RandomStringUtils.randomAlphabetic(20));
-        a.setBalance(RandomUtils.nextLong(1000, 100000));
-        return a;
-    }
 }

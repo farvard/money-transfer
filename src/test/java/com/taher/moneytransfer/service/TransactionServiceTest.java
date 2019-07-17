@@ -1,4 +1,4 @@
-package com.taher.moneytransfer.dao;
+package com.taher.moneytransfer.service;
 
 import static com.taher.moneytransfer.TestUtil.assertTransactionsEqualsNotConsideringId;
 import static com.taher.moneytransfer.TestUtil.randomTransaction;
@@ -12,15 +12,15 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TransactionDaoTest extends BaseTest {
+public class TransactionServiceTest extends BaseTest {
 
-    private TransactionDao dao = new TransactionDaoH2Impl();
+    private TransactionService service = new TransactionService();
 
     @Test
     public void get() throws RecordNotFoundException {
         Transaction random = randomTransaction();
-        Transaction save = dao.save(random);
-        Transaction get = dao.get(save.getId());
+        Transaction save = service.save(random);
+        Transaction get = service.get(save.getId());
         assertTransactionsEqualsNotConsideringId(random, save);
         assertTransactionsEqualsNotConsideringId(random, get);
         Assert.assertEquals(save, get);
@@ -33,10 +33,10 @@ public class TransactionDaoTest extends BaseTest {
         for (int i = 0; i < 10; i++) {
             Transaction account = randomTransaction();
             trans.add(account);
-            saves.add(dao.save(account));
+            saves.add(service.save(account));
         }
         Assert.assertEquals(saves.size(), 10);
-        List<Transaction> all = dao.getAll();
+        List<Transaction> all = service.getAll();
         for (int i = 0; i < 10; i++) {
             assertTransactionsEqualsNotConsideringId(trans.get(i), saves.get(i));
         }
@@ -46,8 +46,8 @@ public class TransactionDaoTest extends BaseTest {
     @Test
     public void save() throws RecordNotFoundException {
         Transaction random = randomTransaction();
-        Transaction save = dao.save(random);
-        Transaction get = dao.get(save.getId());
+        Transaction save = service.save(random);
+        Transaction get = service.get(save.getId());
         assertTransactionsEqualsNotConsideringId(random, save);
         assertTransactionsEqualsNotConsideringId(random, get);
     }
@@ -66,11 +66,11 @@ public class TransactionDaoTest extends BaseTest {
                 account.setSrcAccountId(id);
             }
             trans.add(account);
-            saves.add(dao.save(account));
+            saves.add(service.save(account));
         }
         Assert.assertEquals(saves.size(), count);
-        List<Transaction> all = dao.getAllByAccountId(id);
-        Assert.assertEquals(all.size(), count / 3 * 2);
+        List<Transaction> all = service.getAllByAccountId(id);
+        Assert.assertEquals(count / 3 * 2, all.size());
     }
 
 }

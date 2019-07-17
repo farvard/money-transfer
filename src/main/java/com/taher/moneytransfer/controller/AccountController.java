@@ -1,5 +1,15 @@
 package com.taher.moneytransfer.controller;
 
+import static com.taher.moneytransfer.Constants.ACCOUNTS_BASE_URL;
+import static com.taher.moneytransfer.Constants.CONTENT_TYPE_JSON;
+import static com.taher.moneytransfer.Constants.EMPTY_STRING;
+import static com.taher.moneytransfer.Constants.HEADER_LOCATION;
+import static com.taher.moneytransfer.Constants.TRANSACTIONS_BASE_URL;
+import static com.taher.moneytransfer.controller.JsonUtil.json;
+import static spark.Spark.get;
+import static spark.Spark.path;
+import static spark.Spark.post;
+
 import com.google.gson.Gson;
 import com.taher.moneytransfer.dao.TransactionDao;
 import com.taher.moneytransfer.dao.TransactionDaoH2Impl;
@@ -7,10 +17,6 @@ import com.taher.moneytransfer.model.Account;
 import com.taher.moneytransfer.service.AccountService;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Route;
-
-import static com.taher.moneytransfer.Constants.*;
-import static com.taher.moneytransfer.controller.JsonUtil.json;
-import static spark.Spark.*;
 
 /**
  *

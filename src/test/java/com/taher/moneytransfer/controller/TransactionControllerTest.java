@@ -1,35 +1,25 @@
 package com.taher.moneytransfer.controller;
 
-import com.taher.moneytransfer.dao.DatabaseUtil;
-import com.taher.moneytransfer.model.Transaction;
-import io.restassured.common.mapper.TypeRef;
-import io.restassured.response.Response;
-import org.apache.commons.lang3.RandomUtils;
-import org.eclipse.jetty.http.HttpStatus;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-
-import static com.taher.moneytransfer.Constants.*;
+import static com.taher.moneytransfer.Constants.DEFAULT_APP_PATH;
+import static com.taher.moneytransfer.Constants.HEADER_LOCATION;
+import static com.taher.moneytransfer.Constants.TRANSACTIONS_BASE_URL;
+import static com.taher.moneytransfer.TestUtil.randomTransaction;
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 
+import com.taher.moneytransfer.model.Transaction;
+import io.restassured.common.mapper.TypeRef;
+import io.restassured.response.Response;
+import java.util.List;
+import org.eclipse.jetty.http.HttpStatus;
+import org.junit.Test;
+
 public class TransactionControllerTest extends ControllerTest {
 
-
     private final static String TRANSACTION_TEST_URL = DEFAULT_APP_PATH + TRANSACTIONS_BASE_URL;
-
-    @BeforeClass
-    public static void beforeClass() throws SQLException {
-        new TransactionController();
-        DatabaseUtil.initDB();
-    }
 
     @Test
     public void getTest() {
@@ -54,15 +44,6 @@ public class TransactionControllerTest extends ControllerTest {
         post.then().statusCode(HttpStatus.CREATED_201);
         String location = post.header(HEADER_LOCATION);
         get(location).then().statusCode(HttpStatus.OK_200);
-    }
-
-    private Transaction randomTransaction() {
-        Transaction a = new Transaction();
-        a.setTime(new Date());
-        a.setSrcAccountId(RandomUtils.nextLong(1000, 100000));
-        a.setDstAccountId(RandomUtils.nextLong(1000, 100000));
-        a.setAmount(RandomUtils.nextLong(1000, 100000));
-        return a;
     }
 
 }

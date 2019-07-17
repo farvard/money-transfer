@@ -1,12 +1,14 @@
 package com.taher.moneytransfer;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertTrue;
 
+import java.sql.SQLException;
+import org.junit.Test;
+
 public class AppTest {
+
     @Test
-    public void shouldAnswerWithTrue() {
+    public void runMain() throws SQLException {
         assertTrue(true);
     }
 }

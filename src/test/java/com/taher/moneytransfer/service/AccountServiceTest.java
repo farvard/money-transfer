@@ -1,4 +1,4 @@
-package com.taher.moneytransfer.dao;
+package com.taher.moneytransfer.service;
 
 import static com.taher.moneytransfer.TestUtil.assertAccountsEqualsNotConsideringId;
 import static com.taher.moneytransfer.TestUtil.randomAccount;
@@ -11,15 +11,15 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class AccountDaoTest extends BaseTest {
+public class AccountServiceTest extends BaseTest {
 
-    private AccountDao dao = new AccountDaoH2Impl();
+    private AccountService service = new AccountService();
 
     @Test
     public void get() throws RecordNotFoundException {
         Account random = randomAccount();
-        Account save = dao.save(random);
-        Account get = dao.get(save.getId());
+        Account save = service.save(random);
+        Account get = service.get(save.getId());
         assertAccountsEqualsNotConsideringId(random, save);
         assertAccountsEqualsNotConsideringId(random, get);
         Assert.assertEquals(random, get);
@@ -32,11 +32,11 @@ public class AccountDaoTest extends BaseTest {
         for (int i = 0; i < 10; i++) {
             Account account = randomAccount();
             accounts.add(account);
-            saves.add(dao.save(account));
+            saves.add(service.save(account));
         }
         Assert.assertEquals(saves.size(), 10);
         for (int i = 0; i < 10; i++) {
-            Account get = dao.get(saves.get(i).getId());
+            Account get = service.get(saves.get(i).getId());
             assertAccountsEqualsNotConsideringId(accounts.get(i), saves.get(i));
             assertAccountsEqualsNotConsideringId(accounts.get(i), get);
         }
@@ -45,10 +45,9 @@ public class AccountDaoTest extends BaseTest {
     @Test
     public void save() throws RecordNotFoundException {
         Account random = randomAccount();
-        Account save = dao.save(random);
-        Account get = dao.get(save.getId());
+        Account save = service.save(random);
+        Account get = service.get(save.getId());
         assertAccountsEqualsNotConsideringId(random, save);
         assertAccountsEqualsNotConsideringId(random, get);
     }
-
 }

@@ -31,11 +31,15 @@ public class TransferControllerTest extends ControllerTest {
         Account dst = get(locationDst).as(Account.class);
         long amount = RandomUtils.nextLong(1, src.getBalance());
         Transfer transfer = new Transfer(src.getId(), dst.getId(), amount);
+        transferTest(locationSrc, src, locationDst, dst, transfer);
+    }
+
+    private void transferTest(String locationSrc, Account src, String locationDst, Account dst, Transfer transfer) {
         given().body(transfer).post(TRANSFER_TEST_URL);
         Account srcAfter = get(locationSrc).as(Account.class);
         Account dstAfter = get(locationDst).as(Account.class);
-        assertThat(src.getBalance() - amount, equalTo(srcAfter.getBalance()));
-        assertThat(dst.getBalance() + amount, equalTo(dstAfter.getBalance()));
+        assertThat(src.getBalance() - transfer.getAmount(), equalTo(srcAfter.getBalance()));
+        assertThat(dst.getBalance() + transfer.getAmount(), equalTo(dstAfter.getBalance()));
     }
 
 }

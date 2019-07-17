@@ -16,12 +16,13 @@ import com.taher.moneytransfer.model.Transfer;
  */
 public class TransferService {
 
+    private static final long TIMEOUT_MILLIS = 2000;
     private AccountDao accountDao = new AccountDaoH2Impl();
     private TransactionDao transactionDao = new TransactionDaoH2Impl();
     private AccountLock lock = new SingleNodeInMemoryAccountLock();
-    private long timeoutMillis = 2000;
 
-    public void transfer(Transfer transfer) throws InterruptedException, NotEnoughMoneyException, RecordNotFoundException {
+    public void transfer(Transfer transfer)
+          throws InterruptedException, NotEnoughMoneyException, RecordNotFoundException {
         Long srcAccountId = transfer.getSrcAccountId();
         Long dstAccountId = transfer.getDstAccountId();
         lock(srcAccountId, dstAccountId);
@@ -40,8 +41,8 @@ public class TransferService {
     }
 
     private void lock(Long src, Long dst) throws InterruptedException {
-        lock.lock(src, timeoutMillis);
-        lock.lock(dst, timeoutMillis);
+        lock.lock(src, TIMEOUT_MILLIS);
+        lock.lock(dst, TIMEOUT_MILLIS);
     }
 
     private void unlock(Long src, Long dst) throws InterruptedException {

@@ -21,7 +21,7 @@ public class DatabaseUtil {
     private static final String DB_PASS = "";
     private static final String DB_URL = "jdbc:h2:mem:money_transfer;DB_CLOSE_DELAY=-1;";
     private static final String CREATE_TABLE_SCRIPT = "INIT=runscript from 'classpath:/create-tables.sql'";
-    private static final String SAMPLAE_DATA_SCRIPT = "INIT=runscript from 'classpath:/data.sql'";
+    private static final String SAMPLE_DATA_SCRIPT = "INIT=runscript from 'classpath:/data.sql'";
 
     public static void initDB() throws SQLException {
         DriverManager.getConnection(DB_URL + CREATE_TABLE_SCRIPT, DB_USER, DB_PASS);
@@ -29,7 +29,7 @@ public class DatabaseUtil {
     }
 
     public static void insertSampleData() throws SQLException {
-        DriverManager.getConnection(DB_URL + SAMPLAE_DATA_SCRIPT, DB_USER, DB_PASS);
+        DriverManager.getConnection(DB_URL + SAMPLE_DATA_SCRIPT, DB_USER, DB_PASS);
         log.info("sample data inserted.");
     }
 
@@ -37,8 +37,14 @@ public class DatabaseUtil {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
             QueryRunner runner = new QueryRunner();
             BeanHandler<E> handler = new BeanHandler<>(clazz);
-            return runner.query(connection, query, handler, params);
+            E result = runner.query(connection, query, handler, params);
+            if (result == null) {
+                log.debug("query with null result : {}", query);
+                throw new RecordNotFoundException();
+            }
+            return result;
         } catch (SQLException e) {
+            log.error("can not execute query : " + query, e);
             throw new IllegalStateException();
         }
     }
@@ -49,7 +55,7 @@ public class DatabaseUtil {
             BeanListHandler<E> handler = new BeanListHandler<>(clazz);
             return runner.query(connection, query, handler, params);
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("can not execute query : " + query, e);
             throw new IllegalStateException();
         }
     }
@@ -59,7 +65,7 @@ public class DatabaseUtil {
             QueryRunner runner = new QueryRunner();
             return runner.update(connection, query, params);
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("can not execute query : " + query, e);
             throw new IllegalStateException();
         }
     }

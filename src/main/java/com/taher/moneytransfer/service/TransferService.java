@@ -45,8 +45,8 @@ public class TransferService {
     }
 
     private void unlock(Long src, Long dst) throws InterruptedException {
-        lock.unlock(src);
         lock.unlock(dst);
+        lock.unlock(src);
     }
 
 }

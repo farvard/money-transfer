@@ -9,6 +9,5 @@ public class App {
     public static void main(String[] args) throws SQLException {
         ControllerInitiator.init();
         DatabaseUtil.initDB();
-        DatabaseUtil.insertSampleData();
     }
 }

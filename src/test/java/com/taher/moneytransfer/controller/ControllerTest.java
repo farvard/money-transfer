@@ -1,5 +1,6 @@
 package com.taher.moneytransfer.controller;
 
+import com.taher.moneytransfer.App;
 import com.taher.moneytransfer.dao.DatabaseUtil;
 import java.sql.SQLException;
 import org.junit.AfterClass;
@@ -12,8 +13,7 @@ public class ControllerTest {
 
     @BeforeClass
     public static void beforeClass() throws SQLException {
-        ControllerInitiator.init();
-        DatabaseUtil.initDB();
+        App.main(null);
     }
 
     @AfterClass

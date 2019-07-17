@@ -28,11 +28,6 @@ public class DatabaseUtil {
         log.info("database initialized.");
     }
 
-    public static void insertSampleData() throws SQLException {
-        DriverManager.getConnection(DB_URL + SAMPLE_DATA_SCRIPT, DB_USER, DB_PASS);
-        log.info("sample data inserted.");
-    }
-
     public static <E> E queryOne(Class<E> clazz, String query, Object... params) throws RecordNotFoundException {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
             QueryRunner runner = new QueryRunner();

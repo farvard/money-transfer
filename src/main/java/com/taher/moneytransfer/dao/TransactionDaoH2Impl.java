@@ -3,12 +3,13 @@ package com.taher.moneytransfer.dao;
 import com.taher.moneytransfer.exception.RecordNotFoundException;
 import com.taher.moneytransfer.model.Transaction;
 import com.taher.moneytransfer.util.IdGenerator;
-
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  */
+@Slf4j
 public class TransactionDaoH2Impl implements TransactionDao {
 
     private static final String GET_QUERY = "SELECT * FROM transaction WHERE id = ?";
@@ -29,17 +30,19 @@ public class TransactionDaoH2Impl implements TransactionDao {
 
     @Override
     public Transaction save(Transaction transaction) {
+        log.info("saving transaction={}", transaction);
         long id = ID_GENERATOR.next();
         transaction.setId(id);
         DatabaseUtil.queryUpdate(INSERT_QUERY,
-                transaction.getId(), transaction.getTime(),
-                transaction.getSrcAccountId(), transaction.getDstAccountId(), transaction.getAmount());
+              transaction.getId(), transaction.getTime(),
+              transaction.getSrcAccountId(), transaction.getDstAccountId(), transaction.getAmount());
         return new Transaction(id, transaction.getTime(),
-                transaction.getSrcAccountId(), transaction.getDstAccountId(), transaction.getAmount());
+              transaction.getSrcAccountId(), transaction.getDstAccountId(), transaction.getAmount());
     }
 
     @Override
     public List<Transaction> getAllByAccountId(Long accountId) {
+        log.info("getAllByAccountId called");
         return DatabaseUtil.queryList(Transaction.class, GET_ALL_BY_ACCOUNT_ID_QUERY, accountId, accountId);
     }
 

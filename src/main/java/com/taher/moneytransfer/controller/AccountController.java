@@ -15,12 +15,14 @@ import com.taher.moneytransfer.dao.TransactionDao;
 import com.taher.moneytransfer.dao.TransactionDaoH2Impl;
 import com.taher.moneytransfer.model.Account;
 import com.taher.moneytransfer.service.AccountService;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Route;
 
 /**
  *
  */
+@Slf4j
 public class AccountController {
 
     private AccountService accountService = new AccountService();
@@ -37,12 +39,14 @@ public class AccountController {
 
     private Route getOneAccount() {
         return (request, response) -> {
+            log.info("getOneAccount called");
             response.type(CONTENT_TYPE_JSON);
             return accountService.get(Long.parseLong(request.params(":id")));
         };
     }
 
     private Route getAllAccounts() {
+        log.info("getAllAccounts called");
         return (request, response) -> {
             response.type(CONTENT_TYPE_JSON);
             return accountService.getAll();
@@ -50,6 +54,7 @@ public class AccountController {
     }
 
     private Route saveAccount() {
+        log.info("saveAccount called");
         return (request, response) -> {
             Account save = accountService.save(new Gson().fromJson(request.body(), Account.class));
             String location = request.raw().getRequestURL().toString() + "/" + save.getId();
@@ -60,6 +65,7 @@ public class AccountController {
     }
 
     private Route getAccountsTransactions() {
+        log.info("getAccountsTransactions called");
         return (request, response) -> {
             transactionDao.getAllByAccountId(Long.parseLong(request.params(":id")));
             return EMPTY_STRING;

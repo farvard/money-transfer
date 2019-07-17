@@ -13,6 +13,8 @@ import static org.hamcrest.Matchers.equalTo;
 import com.taher.moneytransfer.model.Account;
 import com.taher.moneytransfer.model.Transfer;
 import io.restassured.response.Response;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
@@ -23,23 +25,42 @@ public class TransferControllerTest extends ControllerTest {
 
     @Test
     public void simpleTransferTest() {
-        Response postSrc = given().body(randomAccount()).post(ACCOUNT_TEST_URL);
-        String locationSrc = postSrc.header(HEADER_LOCATION);
-        Account src = get(locationSrc).as(Account.class);
-        Response postDst = given().body(randomAccount()).post(ACCOUNT_TEST_URL);
-        String locationDst = postDst.header(HEADER_LOCATION);
-        Account dst = get(locationDst).as(Account.class);
+        Account src = saveNewAccount();
+        Account dst = saveNewAccount();
         long amount = RandomUtils.nextLong(1, src.getBalance());
         Transfer transfer = new Transfer(src.getId(), dst.getId(), amount);
-        transferTest(locationSrc, src, locationDst, dst, transfer);
+        transferTest(src, dst, transfer);
     }
 
-    private void transferTest(String locationSrc, Account src, String locationDst, Account dst, Transfer transfer) {
+    private void transferTest(Account src, Account dst, Transfer transfer) {
         given().body(transfer).post(TRANSFER_TEST_URL);
-        Account srcAfter = get(locationSrc).as(Account.class);
-        Account dstAfter = get(locationDst).as(Account.class);
+        Account srcAfter = get(ACCOUNT_TEST_URL + "/" + src.getId()).as(Account.class);
+        Account dstAfter = get(ACCOUNT_TEST_URL + "/" + dst.getId()).as(Account.class);
         assertThat(src.getBalance() - transfer.getAmount(), equalTo(srcAfter.getBalance()));
         assertThat(dst.getBalance() + transfer.getAmount(), equalTo(dstAfter.getBalance()));
     }
 
+    @Test
+    public void concurrentTransferTest() throws InterruptedException {
+        int count = 1000;
+        List<Account> accounts = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            accounts.add(saveNewAccount());
+        }
+        for (int i = 0; i < count; i += 2) {
+            Account src = accounts.get(i);
+            Account dst = accounts.get(i + 1);
+            threads.add(new Thread(() -> transferTest(src, dst, new Transfer(src.getId(), dst.getId(), 5L))));
+        }
+        for (Thread thread : threads) {
+            thread.join();
+        }
+    }
+
+    private Account saveNewAccount() {
+        Response postSrc = given().body(randomAccount()).post(ACCOUNT_TEST_URL);
+        String locationSrc = postSrc.header(HEADER_LOCATION);
+        return get(locationSrc).as(Account.class);
+    }
 }

@@ -1,5 +1,6 @@
 package com.taher.moneytransfer.model;
 
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

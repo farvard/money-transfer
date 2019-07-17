@@ -1,15 +1,14 @@
 package com.taher.moneytransfer.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  *
  */
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transfer {

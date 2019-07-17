@@ -28,6 +28,11 @@ public class AccountControllerTest extends ControllerTest {
     }
 
     @Test
+    public void getInvalidIdTest() {
+        get(ACCOUNT_TEST_URL + "/" + 123456).then().statusCode(HttpStatus.NOT_FOUND_404);
+    }
+
+    @Test
     public void getAllTest() {
         int count = 10;
         for (int i = 0; i < count; i++) {
@@ -36,11 +41,6 @@ public class AccountControllerTest extends ControllerTest {
         List<Account> accounts = get(ACCOUNT_TEST_URL).as(new TypeRef<List<Account>>() {
         });
         assertThat(accounts, hasSize(greaterThan(count)));
-    }
-
-    @Test
-    public void getAccountsTransactionsTest() {
-        //TODO
     }
 
     @Test

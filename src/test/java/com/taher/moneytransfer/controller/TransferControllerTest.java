@@ -11,7 +11,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import com.taher.moneytransfer.model.Account;
+import com.taher.moneytransfer.model.Transaction;
 import com.taher.moneytransfer.model.Transfer;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ public class TransferControllerTest extends ControllerTest {
 
     private final static String TRANSFER_TEST_URL = DEFAULT_APP_PATH + TRANSFER_BASE_URL;
     private final static String ACCOUNT_TEST_URL = DEFAULT_APP_PATH + ACCOUNTS_BASE_URL;
+    private final static String TRANSACTIONS = "/transactions";
 
     @Test
     public void simpleTransferTest() {
@@ -38,6 +41,14 @@ public class TransferControllerTest extends ControllerTest {
         Account dstAfter = get(ACCOUNT_TEST_URL + "/" + dst.getId()).as(Account.class);
         assertThat(src.getBalance() - transfer.getAmount(), equalTo(srcAfter.getBalance()));
         assertThat(dst.getBalance() + transfer.getAmount(), equalTo(dstAfter.getBalance()));
+        List<Transaction> srcTrans = get(ACCOUNT_TEST_URL + "/" + src.getId() + TRANSACTIONS)
+              .as(new TypeRef<List<Transaction>>() {
+              });
+        List<Transaction> dstTrans = get(ACCOUNT_TEST_URL + "/" + dst.getId() + TRANSACTIONS)
+              .as(new TypeRef<List<Transaction>>() {
+              });
+        assertThat(1, equalTo(srcTrans.size()));
+        assertThat(1, equalTo(dstTrans.size()));
     }
 
     @Test

@@ -28,6 +28,11 @@ public class TransactionControllerTest extends ControllerTest {
     }
 
     @Test
+    public void getInvalidIdTest() {
+        get(TRANSACTION_TEST_URL + "/" + 123456).then().statusCode(HttpStatus.NOT_FOUND_404);
+    }
+
+    @Test
     public void getAllTest() {
         int count = 10;
         for (int i = 0; i < count; i++) {

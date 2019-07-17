@@ -12,9 +12,7 @@ public class ControllerTest {
 
     @BeforeClass
     public static void beforeClass() throws SQLException {
-        new AccountController();
-        new TransactionController();
-        new TransferController();
+        ControllerInitiator.init();
         DatabaseUtil.initDB();
     }
 

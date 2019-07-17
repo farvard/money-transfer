@@ -2,7 +2,6 @@ package com.taher.moneytransfer.controller;
 
 import static com.taher.moneytransfer.Constants.ACCOUNTS_BASE_URL;
 import static com.taher.moneytransfer.Constants.CONTENT_TYPE_JSON;
-import static com.taher.moneytransfer.Constants.EMPTY_STRING;
 import static com.taher.moneytransfer.Constants.HEADER_LOCATION;
 import static com.taher.moneytransfer.Constants.TRANSACTIONS_BASE_URL;
 import static com.taher.moneytransfer.controller.JsonUtil.json;
@@ -67,8 +66,8 @@ public class AccountController {
     private Route getAccountsTransactions() {
         log.info("getAccountsTransactions called");
         return (request, response) -> {
-            transactionDao.getAllByAccountId(Long.parseLong(request.params(":id")));
-            return EMPTY_STRING;
+            response.type(CONTENT_TYPE_JSON);
+            return transactionDao.getAllByAccountId(Long.parseLong(request.params(":id")));
         };
     }
 }
